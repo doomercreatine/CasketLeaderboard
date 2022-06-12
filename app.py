@@ -2,13 +2,9 @@
 This file is for an interactive dashboard to visualize the guesses that people have made to date.
 """
 
-from msilib.schema import Component
-from select import select
 import pandas as pd
 import plotly.express as px
-import json
-from tinydb import TinyDB, Query
-from dash import Dash, html, dcc, Input, Output, dash_table
+from dash import Dash, html, dash_table
 import dash_bootstrap_components as dbc
 import requests
 
