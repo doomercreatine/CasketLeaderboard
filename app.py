@@ -53,6 +53,7 @@ for key, value in winners.items():
             'Num. Guesses': n_guesses,
             'Closest Guess': closest_guess,
             'Wins': value,
+            'Rate': f"1 / {round(( n_guesses/value ), 2)}"
         }
     )
     
@@ -66,7 +67,7 @@ def update_graph():
     fig.update_xaxes(
 
     tickformat="%d %b %Y")
-    fig.layout.update(title="Guesses per Stream")
+    fig.layout.update(title="Guesses per Stream", template="plotly_dark")
     return fig
 
 def line_graph():
@@ -80,11 +81,17 @@ def line_graph():
     guess_data = np.where(guess_data > guess_upper, guess_upper, guess_data)
     group_labels = ['casket', 'guess'] # name of the dataset
     fig = ff.create_distplot([casket_data, guess_data], group_labels, show_hist=False, curve_type='kde', show_rug=False)
-    fig.layout.update(title='Guess and Casket Distributions')
+    fig.layout.update(title='Guess and Casket Distributions', template="plotly_dark")
     return fig
 
+def default_plot():
+    fig = go.FigureWidget(data=[
+    go.Histogram(x=[])
+    ])
+    fig.layout.update(template="plotly_dark")
+    return fig
 # Create the Dash app
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 server = app.server
 # Set up the app layout
 app.layout = html.Div([
@@ -111,7 +118,7 @@ app.layout = html.Div([
         page_current= 0,
         page_size= 100,
         filter_options={'case': 'insensitive'},
-        style_cell={'textAlign': 'center'}
+        style_cell={'textAlign': 'center', 'background': '#222'}
     ),
     html.H4(f"Median casket value: {'{:,}'.format(int(np.median(df['casket'])))} | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}", style={
             'textAlign': 'center'
@@ -124,8 +131,8 @@ app.layout = html.Div([
         dcc.Graph(id='guess-line', figure=line_graph(), style={'width': '49%', 'display': 'inline-block'}),
     ], style={'padding': '0 20'}),
     html.Div([
-        dcc.Graph(id='guess-series', style={'width': '49%', 'display': 'inline-block'}),
-        dcc.Graph(id='guess-series-x', style={'width': '49%', 'display': 'inline-block'}),
+        dcc.Graph(id='guess-series', figure=default_plot(), style={'width': '49%', 'display': 'inline-block'}),
+        dcc.Graph(id='guess-series-x', figure=default_plot(), style={'width': '49%', 'display': 'inline-block'}),
     ]),
     html.Br(),
     html.H3("All Data", style={
@@ -150,7 +157,7 @@ app.layout = html.Div([
         page_current= 0,
         page_size= 20,
         filter_options={'case': 'insensitive'},
-        style_cell={'textAlign': 'center'},
+        style_cell={'textAlign': 'center', 'background': '#222'},
     ),
 
 ])
@@ -162,6 +169,7 @@ app.layout = html.Div([
     Output('guess-series', 'figure'),
     Input('guess-graph', 'clickData'))
 def update_x_timeseries(clickData):
+
     idx = clickData['points'][0]['pointNumbers']
     new_df = df.iloc[idx]
     #fig = px.histogram(new_df, x = "time", title="Guesses per Casket")
@@ -170,7 +178,7 @@ def update_x_timeseries(clickData):
     ])
     fig.update_xaxes(
     tickformat="%H:%M")
-    fig.layout.update(title="Guesses per Casket")
+    fig.layout.update(title='Guesses per Casket', template="plotly_dark")
     return fig
     
 
@@ -189,7 +197,7 @@ def update_xx_timeseries(clickData):
         end=max(new_df['guess'])+100000,
         size=100000
     ))
-    fig.layout.update(title="Guesses Distribution")
+    fig.layout.update(title="Guesses Distribution", template="plotly_dark")
     return fig
 
 
