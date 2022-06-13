@@ -67,9 +67,9 @@ def update_graph():
 def line_graph():
     casket_data = df['casket'].tolist()
     guess_data = df['guess'].tolist()
-    guess_lower = df['guess'].quantile(0.05)
+    guess_lower = df['guess'].quantile(0.01)
 
-    guess_upper = df['guess'].quantile(0.95)
+    guess_upper = df['guess'].quantile(0.99)
     guess_data = np.where(guess_data < guess_lower, guess_lower, guess_data)
 
     guess_data = np.where(guess_data > guess_upper, guess_upper, guess_data)
