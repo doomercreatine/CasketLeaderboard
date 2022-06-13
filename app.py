@@ -113,7 +113,9 @@ app.layout = html.Div([
         filter_options={'case': 'insensitive'},
         style_cell={'textAlign': 'center'}
     ),
-    
+    html.H4(f"Median casket value: {'{:,}'.format(int(np.median(df['casket'])))} | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}", style={
+            'textAlign': 'center'
+        }),
     html.Div([
         dcc.Graph(
             id='guess-graph',
