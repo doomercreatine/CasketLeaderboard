@@ -2,7 +2,6 @@
 This file is for an interactive dashboard to visualize the guesses that people have made to date.
 """
 
-from turtle import title
 import pandas as pd
 import plotly.express as px
 import json
