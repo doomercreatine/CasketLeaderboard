@@ -29,6 +29,7 @@ df['date'] = [d.date() for d in df['date']]
 df['time'] = pd.to_datetime(df['time'], format="%H%M%S")
 df['time'] = [t.time() for t in df['time']]
 df['difference'] = abs(df['guess'] - df['casket'])
+total_caskets = len(set(df['casket']))
 
 winners = {}
 
@@ -127,9 +128,12 @@ app.layout = html.Div([
         filter_options={'case': 'insensitive'},
         style_cell={'textAlign': 'center', 'background': '#222'}
     ),
-    html.H4(f"Median casket value: {'{:,}'.format(int(np.median(df['casket'])))} | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}", style={
+    html.H4(f"Median casket value: {'{:,}'.format(int(np.median(df['casket'])))}gp | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}gp", style={
             'textAlign': 'center'
         }),
+    html.H4(f"Total caskets: {total_caskets} | Guesses logged: {df['guess'].count()}", style={
+        'textAlign': 'center'
+    }),
     html.Div([
         dcc.Graph(
             id='guess-graph',
