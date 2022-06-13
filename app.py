@@ -2,6 +2,7 @@
 This file is for an interactive dashboard to visualize the guesses that people have made to date.
 """
 
+from turtle import title
 import pandas as pd
 import plotly.express as px
 import json
@@ -12,6 +13,7 @@ import requests
 import plotly.figure_factory as ff
 import scipy
 import numpy as np
+import plotly.graph_objects as go
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -58,10 +60,14 @@ for key, value in winners.items():
 leaderboard = pd.DataFrame(leaderboard)
 
 def update_graph():
-    fig = px.histogram(df, x = "date", title="Guesses per Stream")
+    #fig = px.histogram(df, x = "date", title="Guesses per Stream", render_mode='webgl')
+    fig = go.FigureWidget(data=[
+        go.Histogram(x=df['date'].tolist())
+    ])
     fig.update_xaxes(
 
     tickformat="%d %b %Y")
+    fig.layout.update(title="Guesses per Stream")
     return fig
 
 def line_graph():
@@ -157,9 +163,13 @@ app.layout = html.Div([
 def update_x_timeseries(clickData):
     idx = clickData['points'][0]['pointNumbers']
     new_df = df.iloc[idx]
-    fig = px.histogram(new_df, x = "time", title="Guesses per Casket")
+    #fig = px.histogram(new_df, x = "time", title="Guesses per Casket")
+    fig = go.FigureWidget(data=[
+        go.Histogram(x=new_df['time'].tolist())
+    ])
     fig.update_xaxes(
     tickformat="%H:%M")
+    fig.layout.update(title="Guesses per Casket")
     return fig
     
 
@@ -169,12 +179,16 @@ def update_x_timeseries(clickData):
 def update_xx_timeseries(clickData):
     idx = clickData['points'][0]['pointNumbers']
     new_df = df.iloc[idx]
-    fig = px.histogram(new_df, x = "guess", title = "Guesses Distribution")
+    #fig = px.histogram(new_df, x = "guess", title = "Guesses Distribution")
+    fig = go.FigureWidget(data=[
+        go.Histogram(x=new_df['guess'].tolist())
+    ])
     fig.update_traces(xbins=dict( # bins used for histogram
         start=0,
         end=max(new_df['guess'])+100000,
         size=100000
     ))
+    fig.layout.update(title="Guesses Distribution")
     return fig
 
 
