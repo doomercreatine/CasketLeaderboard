@@ -80,7 +80,7 @@ def line_graph():
 
 # Create the Dash app
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
+server = app.server
 # Set up the app layout
 app.layout = html.Div([
     html.H1("Hey_Jase Master Casket Tracker", style={'textAlign': 'center'}),
