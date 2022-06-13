@@ -74,7 +74,7 @@ def line_graph():
 
     guess_data = np.where(guess_data > guess_upper, guess_upper, guess_data)
     group_labels = ['casket', 'guess'] # name of the dataset
-    fig = ff.create_distplot([casket_data, guess_data], group_labels, show_hist=False, curve_type='normal', show_rug=False)
+    fig = ff.create_distplot([casket_data, guess_data], group_labels, show_hist=False, curve_type='kde', show_rug=False)
     fig.layout.update(title='Guess and Casket Distributions')
     return fig
 
