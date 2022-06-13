@@ -90,9 +90,14 @@ def default_plot():
     ])
     fig.layout.update(template="plotly_dark")
     return fig
+
+
 # Create the Dash app
 app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+app.title = "Casket Dashboard"
 server = app.server
+
+
 # Set up the app layout
 app.layout = html.Div([
     html.H1("Hey_Jase Master Casket Tracker", style={'textAlign': 'center'}),
@@ -207,5 +212,5 @@ def update_xx_timeseries(clickData):
 
 # Run local server
 if __name__ == '__main__':
-    app.title = "Hey_Jase Master Casket Dashboard"
+    #app.title = "Hey_Jase Master Casket Dashboard"
     app.run_server(debug=False)
