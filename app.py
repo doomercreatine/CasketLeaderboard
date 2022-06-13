@@ -104,10 +104,10 @@ app.layout = html.Div([
         columns=[
             {"name": i, "id": i, "deletable": False, "selectable": True} for i in leaderboard.columns
         ],
-        data=leaderboard.head(n=10).to_dict('records'),
+        data=leaderboard.to_dict('records'),
         editable=False,
-        filter_action="none",
-        sort_action="none",
+        filter_action="native",
+        sort_action="native",
         sort_mode="single",
         column_selectable=False,
         row_selectable=False,
@@ -116,7 +116,7 @@ app.layout = html.Div([
         selected_rows=[],
         page_action="native",
         page_current= 0,
-        page_size= 100,
+        page_size= 10,
         filter_options={'case': 'insensitive'},
         style_cell={'textAlign': 'center', 'background': '#222'}
     ),
