@@ -4,9 +4,14 @@ This file is for an interactive dashboard to visualize the guesses that people h
 
 import pandas as pd
 import plotly.express as px
-from dash import Dash, html, dash_table
+import json
+from tinydb import TinyDB, Query
+from dash import Dash, html, dcc, Input, Output, dash_table
 import dash_bootstrap_components as dbc
 import requests
+import plotly.figure_factory as ff
+import scipy
+import numpy as np
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -156,25 +161,6 @@ def update_x_timeseries(clickData):
     fig.update_xaxes(
     tickformat="%H:%M")
     return fig
-'''
-@app.callback(
-    Output('guess-line', 'figure'),
-    Input('guess-graph', 'clickData'))
-def update_line_timeseries(clickData):
-    idx = clickData['points'][0]['pointNumbers']
-    new_df = df.iloc[idx]
-    hist_data = new_df['casket'].tolist()
-    hist_data2 = new_df['guess'].tolist()
-    mean = np.median(np.array(hist_data), axis=0)
-    sd = np.std(np.array(hist_data), axis=0)
-
-    final_list = [x for x in hist_data if (x > mean - 2 * sd)]
-    final_list = [x for x in final_list if (x < mean + 2 * sd)]
-    group_labels = ['casket', 'guess'] # name of the dataset
-
-    fig = ff.create_distplot([final_list, hist_data2], group_labels, show_hist=False, curve_type='kde')
-    return fig
-    '''
     
 
 @app.callback(
