@@ -95,7 +95,7 @@ def default_plot():
 # Create the Dash app
 app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 app.title = "Casket Dashboard"
-app._favicon = ("./fav.ico")
+app._favicon = ("./favicon.ico")
 server = app.server
 
 
