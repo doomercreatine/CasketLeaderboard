@@ -172,8 +172,8 @@ def update_xx_timeseries(clickData):
     fig = px.histogram(new_df, x = "guess", title = "Guesses Distribution")
     fig.update_traces(xbins=dict( # bins used for histogram
         start=0,
-        end=max(new_df['guess'])+10000,
-        size=10000
+        end=max(new_df['guess'])+100000,
+        size=100000
     ))
     return fig
 
