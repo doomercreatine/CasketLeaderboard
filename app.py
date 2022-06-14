@@ -17,7 +17,7 @@ import plotly.graph_objects as go
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
     
-db = requests.get('https://raw.githubusercontent.com/doomercreatine/MasterCasketBot/main/updated_db.json').json()
+db = requests.get('https://raw.githubusercontent.com/doomercreatine/MasterCasketBot/main/updated_db.json',headers={'Cache-Control': 'no-cache'}).json()
 
 casket_data = pd.DataFrame()
 guesses = [item for item in iter(db['_default'])]
