@@ -16,9 +16,10 @@ import plotly.graph_objects as go
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-    
+# Query the Github Repo for the most up-to-date database
 db = requests.get('https://raw.githubusercontent.com/doomercreatine/MasterCasketBot/main/updated_db.json',headers={'Cache-Control': 'no-cache'}).json()
 
+# Build a pandas dataframe from the JSON
 casket_data = pd.DataFrame()
 guesses = [item for item in iter(db['_default'])]
 guesses = [db['_default'][i] for i in guesses]
@@ -31,6 +32,8 @@ df['time'] = [t.time() for t in df['time']]
 df['difference'] = abs(df['guess'] - df['casket'])
 total_caskets = len(set(df['casket']))
 
+
+# Create a dict to hold a list of winners and how many times they've won
 winners = {}
 
 for _, item in df.iterrows():
@@ -42,6 +45,7 @@ for _, item in df.iterrows():
 
 winners = dict(sorted(winners.items(), key=lambda item: item[1], reverse=True))
 
+### Creation of the dataframe to hold leaderboard information
 leaderboard = []
 
 for key, value in winners.items():
@@ -59,18 +63,19 @@ for key, value in winners.items():
     )
     
 leaderboard = pd.DataFrame(leaderboard)
+###
 
+# Creates the top left graph for guesses per stream
 def update_graph():
-    #fig = px.histogram(df, x = "date", title="Guesses per Stream", render_mode='webgl')
     fig = go.FigureWidget(data=[
         go.Histogram(x=df['date'].tolist())
     ])
     fig.update_xaxes(
-
     tickformat="%d %b %Y")
     fig.layout.update(title="Guesses per Stream", template="plotly_dark")
     return fig
 
+# Line graph creation to plot the distribution of casket values versus guesses
 def line_graph():
     casket_data = df['casket'].tolist()
     guess_data = df['guess'].tolist()
@@ -85,6 +90,7 @@ def line_graph():
     fig.layout.update(title='Guess and Casket Distributions', template="plotly_dark")
     return fig
 
+# Used to create an empty plot so that themes are consistent when no data selected yet
 def default_plot():
     fig = go.FigureWidget(data=[
     go.Histogram(x=[])
@@ -102,7 +108,9 @@ server = app.server
 
 # Set up the app layout
 app.layout = html.Div([
-    html.H1("Hey_Jase Master Casket Tracker", style={'textAlign': 'center'}),
+    # Page title
+    html.H1("Hey_Jase Master Casket Tracker", style={'textAlign': 'center'}), 
+    # Leaderboard header and datatable formatting
     html.H3("Leaderboard", style={
             'textAlign': 'center'
         }),
@@ -128,24 +136,33 @@ app.layout = html.Div([
         filter_options={'case': 'insensitive'},
         style_cell={'textAlign': 'center', 'background': '#222'}
     ),
+    # Stats on casket values and guesses
     html.H4(f"Median casket value: {'{:,}'.format(int(np.median(df['casket'])))}gp | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}gp", style={
             'textAlign': 'center'
         }),
+    # Count of how many caskets and how many guesses have been logged
     html.H4(f"Total caskets: {total_caskets} | Guesses logged: {df['guess'].count()}", style={
         'textAlign': 'center'
     }),
+    # Row 1 of plots
     html.Div([
+        # Column 1 plot 
         dcc.Graph(
             id='guess-graph',
             figure=update_graph(), style={'width': '49%', 'display': 'inline-block'}
         ),
+        # Column 2 plot
         dcc.Graph(id='guess-line', figure=line_graph(), style={'width': '49%', 'display': 'inline-block'}),
     ], style={'padding': '0 20'}),
+    # Row 2 of plots
     html.Div([
+        # Column 1
         dcc.Graph(id='guess-series', figure=default_plot(), style={'width': '49%', 'display': 'inline-block'}),
+        # Column 2
         dcc.Graph(id='guess-series-x', figure=default_plot(), style={'width': '49%', 'display': 'inline-block'}),
     ]),
     html.Br(),
+    # Raw datatable
     html.H3("All Data", style={
             'textAlign': 'center'
         }),
@@ -176,15 +193,13 @@ app.layout = html.Div([
 
 
 
-
+# Updates the Row 2 Column 1 graph
 @app.callback(
     Output('guess-series', 'figure'),
     Input('guess-graph', 'clickData'))
 def update_x_timeseries(clickData):
-
     idx = clickData['points'][0]['pointNumbers']
     new_df = df.iloc[idx]
-    #fig = px.histogram(new_df, x = "time", title="Guesses per Casket")
     fig = go.FigureWidget(data=[
         go.Histogram(x=new_df['time'].tolist())
     ])
@@ -193,14 +208,13 @@ def update_x_timeseries(clickData):
     fig.layout.update(title='Guesses per Casket', template="plotly_dark")
     return fig
     
-
+# Updates the Row 2 Column 2 graph
 @app.callback(
     Output('guess-series-x', 'figure'),
     Input('guess-series', 'clickData'))
 def update_xx_timeseries(clickData):
     idx = clickData['points'][0]['pointNumbers']
     new_df = df.iloc[idx]
-    #fig = px.histogram(new_df, x = "guess", title = "Guesses Distribution")
     fig = go.FigureWidget(data=[
         go.Histogram(x=new_df['guess'].tolist())
     ])
@@ -211,8 +225,6 @@ def update_xx_timeseries(clickData):
     ))
     fig.layout.update(title="Guesses Distribution", template="plotly_dark")
     return fig
-
-
 
 
 # Run local server
