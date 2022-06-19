@@ -58,7 +58,7 @@ for key, value in winners.items():
             'Num. Guesses': n_guesses,
             'Closest Guess': closest_guess,
             'Wins': value,
-            'Rate': f"1 / {round(( n_guesses/value ), 2)}"
+            'Rate (1 in )': round(( n_guesses/value ), 2)
         }
     )
     
