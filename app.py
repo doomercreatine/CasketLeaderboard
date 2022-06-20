@@ -117,11 +117,11 @@ def update_data(n_clicks, sha_data, data):
         guesses = [db['_default'][i] for i in guesses]
         df = pd.DataFrame(guesses,
                         columns=['date', 'time', 'name', 'guess', 'casket', 'win'])
-    df['date'] = pd.to_datetime(df['date'])
-    df['date'] = [d.date() for d in df['date']]
-    df['time'] = pd.to_datetime(df['time'], format="%H%M%S")
-    df['time'] = [t.time() for t in df['time']]
-    df['difference'] = abs(df['guess'] - df['casket'])
+        df['date'] = pd.to_datetime(df['date'])
+        df['date'] = [d.date() for d in df['date']]
+        df['time'] = pd.to_datetime(df['time'], format="%H%M%S")
+        df['time'] = [t.time() for t in df['time']]
+        df['difference'] = abs(df['guess'] - df['casket'])
     
     total_caskets = len(set(df['casket']))
     return [
