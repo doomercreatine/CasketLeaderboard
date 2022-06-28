@@ -9,6 +9,7 @@ import numpy as np
 import json
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
+from scipy import stats
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -122,16 +123,16 @@ def update_data(n_clicks, sha_data, data):
         df['time'] = pd.to_datetime(df['time'], format="%H%M%S")
         df['time'] = [t.time() for t in df['time']]
         df['difference'] = abs(df['guess'] - df['casket'])
-    
-    total_caskets = len(set(df['casket']))
+    caskets = sorted(set(df['casket']))
+    total_caskets = len(caskets)
     return [
         df.to_json(),
         [    # Stats on casket values and guesses
-            html.H4(f"Median casket value: {'{:,}'.format(int(np.median(df['casket'])))}gp | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}gp", style={
+            html.H4(f"Total caskets: {total_caskets} | Mean casket value: {'{:,}'.format(int(np.mean(caskets)))} (\u00B1 {'{:,}'.format(int(np.std(caskets)))}gp) sd) | Median casket value: {'{:,}'.format(int(np.median(caskets)))}gp", style={
                     'textAlign': 'center'
             }),
             # Count of how many caskets and how many guesses have been logged
-            html.H4(f"Total caskets: {total_caskets} | Guesses logged: {df['guess'].count()}", style={
+            html.H4(f"Guesses logged: {df['guess'].count()} | Mean guess value: {'{:,}'.format(int(np.mean(df['guess'])))} (\u00B1 {'{:,}'.format(int(np.std(df['guess'])))}gp) sd | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}gp", style={
                 'textAlign': 'center'
             })]
     ]
