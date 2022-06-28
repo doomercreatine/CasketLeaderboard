@@ -132,7 +132,7 @@ def update_data(n_clicks, sha_data, data):
                     'textAlign': 'center'
             }),
             # Count of how many caskets and how many guesses have been logged
-            html.H4(f"Guesses logged: {df['guess'].count()} | Mean guess value: {'{:,}'.format(int(np.mean(df['guess'])))} (\u00B1 {'{:,}'.format(int(np.std(df['guess'])))}gp) sd | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}gp", style={
+            html.H4(f"Guesses logged: {'{:,}'.format(df['guess'].count())} | Mean guess value: {'{:,}'.format(int(np.mean(df['guess'])))} (\u00B1 {'{:,}'.format(int(np.std(df['guess'])))}gp) sd | Median guess value: {'{:,}'.format(int(np.median(df['guess'])))}gp", style={
                 'textAlign': 'center'
             })]
     ]
